@@ -7,20 +7,39 @@ namespace rs232 /* rs232s.ts
     // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"
 
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="sende 1 Bit %bit" weight=9
-    export function sende1Bit(bit: boolean) {
-        if (bit) {
-            pins.digitalWritePin(n_pinLED, 1)
-        } else {
-            pins.digitalWritePin(n_pinLED, 0)
+
+    //% group="Senden"
+    //% block="sende Text %text || Ende-Zeichencode %endCode" weight=7
+    //% endCode.defl=13
+    export function sendeText(text: string, endCode = 13) {
+        for (let i = 0; i < text.length; i++) {
+            sende11Bit(ascToBin(text.charCodeAt(i)))
         }
-        // basic.pause(iPause_ms - input.runningTime())
-        // iPause_ms += iTakt_ms
+        if (endCode > 0)
+            sende11Bit(ascToBin(endCode))
     }
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="sende 11 Bit %send8Bits" weight=8
+
+
+    //% group="Senden"
+    //% block="sende 1 Zeichen aus Text %text index %index" weight=6
+    export function sendeChr(text: string, index: number) {
+        sende11Bit(ascToBin(text.charCodeAt(index)))
+    }
+
+
+    //% group="Senden"
+    //% block="sende 1 Zeichen ASCII Code %asc" weight=5
+    //% asc.min=32 asc.max=127 asc.defl=13
+    export function sendeAsc(asc: number) {
+        sende11Bit(ascToBin(asc))
+    }
+
+
+
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    //% block="sende 11 Bit %send8Bits" weight=5
     export function sende11Bit(send8Bit: boolean[]) {
         // Daten (in Variable sendBits) senden
         let iPause_ms = input.runningTime() + n_takt_ms
@@ -44,23 +63,20 @@ namespace rs232 /* rs232s.ts
 
     }
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="sende Text %text || Ende-Zeichencode %endCode" weight=7
-    //% endCode.defl=13
-    export function sendeText(text: string, endCode: number) {
-        for (let i = 0; i < text.length; i++) {
-            sende11Bit(ascToBin(text.charCodeAt(i)))
+
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    //% block="sende 1 Bit %bit" weight=3
+    export function sende1Bit(bit: boolean) {
+        if (bit) {
+            pins.digitalWritePin(n_pinLED, 1)
+        } else {
+            pins.digitalWritePin(n_pinLED, 0)
         }
-        if (endCode > 0)
-            sende11Bit(ascToBin(endCode))
+        // basic.pause(iPause_ms - input.runningTime())
+        // iPause_ms += iTakt_ms
     }
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="sende 1 Zeichen ASCII Code %asc" weight=6
-    //% asc.min=32 asc.max=127 asc.defl=13
-    export function sendeAsc(asc: number) {
-        sende11Bit(ascToBin(asc))
-    }
 
 
 

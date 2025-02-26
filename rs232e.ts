@@ -8,15 +8,15 @@ namespace rs232 /* rs232e.ts
     // ========== group="Empfang"
 
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="empfange Text || Ende-Zeichencode %endCode" weight=7
+    //% group="Empfang"
+    //% block="empfange Text || Ende-Zeichencode %endCode" weight=8
     //% endCode.defl=13
     export function empfangeText(endCode = 13): string {
         n_escape = false
         let text = ""
         let iAsc: number
-        while (true) {
-            iAsc = binToAsc(empfange10Bit())
+        while (!n_escape) {
+            iAsc = binToAsc(empfange10Bit()) // ASCII-Code oder Fehler-Code -1 -2 -3 -4
             if (iAsc == endCode) {
                 text += String.fromCharCode(iAsc)
                 break
@@ -26,15 +26,28 @@ namespace rs232 /* rs232e.ts
                 break
             }
             else {
-                text += ascToChr(iAsc)
+                text += ascToChr(iAsc) // ungültige Codes in |iAsc|
             }
         }
         return text
     }
 
+    //% group="Empfang"
+    //% block="empfange 1 Zeichen ASCII (oder Fehler) Code " weight=7
+    export function empfange1Zeichen() {
+        n_escape = false
+        return binToAsc(empfange10Bit()) // ASCII-Code oder Fehler-Code -1 -2 -3 -4
+    }
+
+    //% group="Empfang"
+    //% block="warten auf Startbit abbrechen" weight=6
+    export function empfangAbbrechen() {
+        n_escape = true
+    }
 
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
     //% block="empfange 1 Zeichen (10-Bitarray)" weight=5
     export function empfange10Bit(): boolean[] {
         let iPause_ms: number
@@ -48,21 +61,21 @@ namespace rs232 /* rs232e.ts
         if (!n_escape) {
 
             // Startbit nach einer halben Taktzeit einlesen
-            //  iPause_ms = input.runningTime() + iTakt_ms * 0.5
             for (let i = 0; i < 10; i++) {
                 basic.pause(iPause_ms - input.runningTime())
                 empfangeneBits.push(empfange1Bit()) // Lichtschranke abfragen
                 iPause_ms += n_takt_ms // einen Takt warten, trifft das nächste Bit in der Mitte
             }
-            return empfangeneBits
+
         }
-        else {
-            return []
-        }
+        /*  else {
+             return []
+         } */
+        return empfangeneBits
     }
 
 
-    //% group="Empfang: 1 Bit (Fototransistor hell ist true)"
+    //% group="Empfang: 1 Bit (Fototransistor hell ist true)" advanced=true
     //% block="empfange 1 Bit (analogReadPin)" weight=2
     export function empfange1Bit() {
         // hell ist true, analoger Wert < 150
