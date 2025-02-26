@@ -14,7 +14,7 @@ namespace rs232
     export let n_startBitTime: number = 0.5
     export let n_escape: boolean = false // warten auf Startbit beim Empfang abbrechen
 
-    //% group="Pins und Takt (Millisekunden)"
+    //% group="asynchrone serielle Datenübertragung mit Licht"
     //% block="Pins: LED %pinLED Fototransistor %pinFototransistor Helligkeit < %valueFototransistor" weight=5
     //% pinLED.defl=DigitalPin.C17 pinFototransistor.defl=AnalogPin.C16 valueFototransistor.defl=150
     export function setPins(pinLED: DigitalPin, pinFototransistor: AnalogPin, valueFototransistor: number) {
@@ -23,7 +23,7 @@ namespace rs232
         n_valueFototransistor = valueFototransistor
     }
 
-    //% group="Pins und Takt (Millisekunden)"
+    //% group="asynchrone serielle Datenübertragung mit Licht"
     //% block="Takt: %pTakt_ms ms || startBitTime %startBitTime" weight=4
     //% pTakt_ms.defl=400
     //% startBitTime.defl=0.5
