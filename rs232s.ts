@@ -45,13 +45,14 @@ namespace rs232 /* rs232s.ts
     }
 
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="sende Text %text mit ENTER %mitCR" weight=7
-    export function sendeText(text: string, mitCR: boolean) {
+    //% block="sende Text %text || Ende-Zeichencode %endCode" weight=7
+    //% endCode.defl=13
+    export function sendeText(text: string, endCode: number) {
         for (let i = 0; i < text.length; i++) {
             sende11Bit(ascToBin(text.charCodeAt(i)))
         }
-        if (mitCR)
-            sende11Bit(ascToBin(13))
+        if (endCode > 0)
+            sende11Bit(ascToBin(endCode))
     }
 
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
@@ -63,13 +64,13 @@ namespace rs232 /* rs232s.ts
 
 
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
     //% block="ASCII Zeichen → 8-Bitarray text %text index %index" weight=5
     export function chrToBin(text: string, index: number): boolean[] {
         return ascToBin(text.charCodeAt(index))
     }
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
     //% block="ASCII Code → 8-Bitarray %ascByte" weight=4
     export function ascToBin(ascByte: number): boolean[] {
         let iParity = 0, bBit: boolean
@@ -86,7 +87,7 @@ namespace rs232 /* rs232s.ts
     }
 
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
     //% block="ASCII Zeichen → ASCII Code text %text index %index" weight=3
     export function chrToAsc(text: string, index: number): number {
         return text.charCodeAt(index)

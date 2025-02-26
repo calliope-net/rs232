@@ -7,16 +7,35 @@ namespace rs232 /* rs232e.ts
 
     // ========== group="Empfang"
 
+
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="empfange 1 Bit (hell ist true)" weight=9
-    export function empfange1Bit() {
-        // hell ist true
-        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
+    //% block="empfange Text || Ende-Zeichencode %endCode" weight=7
+    //% endCode.defl=13
+    export function empfangeText(endCode = 13): string {
+        n_escape = false
+        let text = ""
+        let iAsc: number
+        while (true) {
+            iAsc = binToAsc(empfange10Bit())
+            if (iAsc == endCode) {
+                text += String.fromCharCode(iAsc)
+                break
+            }
+            else if (iAsc == -1) {
+                text += "|" + iAsc + "|"
+                break
+            }
+            else {
+                text += ascToChr(iAsc)
+            }
+        }
+        return text
     }
 
 
+
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="empfange 10 Bit" weight=8
+    //% block="empfange 1 Zeichen (10-Bitarray)" weight=5
     export function empfange10Bit(): boolean[] {
         let iPause_ms: number
         let empfangeneBits: boolean[] = []
@@ -42,29 +61,30 @@ namespace rs232 /* rs232e.ts
         }
     }
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="empfange Text bis ENTER" weight=7
-    export function empfangeText(): string {
-        n_escape = false
-        let text = ""
-        let iAsc: number
-        while (true) {
-            iAsc = binToAsc(empfange10Bit())
-            if (iAsc == 13) {
-                text += String.fromCharCode(iAsc)
-                break
-            } else if (iAsc == -1) {
-                text += "|" + iAsc + "|"
-                break
-            } else {
-                text += ascToChr(iAsc)
-            }
-        }
-        return text
+
+    //% group="Empfang: 1 Bit (Fototransistor hell ist true)"
+    //% block="empfange 1 Bit (analogReadPin)" weight=2
+    export function empfange1Bit() {
+        // hell ist true, analoger Wert < 150
+        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
     }
 
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
     //% block="10-Bitarray → ASCII Code %bitArray" weight=4
     export function binToAsc(bitArray: boolean[]): number {
         let iDez = 0, iParity = 0, iFehler = 0
@@ -109,7 +129,7 @@ namespace rs232 /* rs232e.ts
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
     }
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
     //% block="ASCII Code → ASCII Zeichen %ascByte 32..127 \\|fehler\\|" weight=2
     export function ascToChr(ascByte: number) {
         if (between(ascByte, 32, 127))

@@ -38,11 +38,11 @@ namespace rs232
 
     // ========== group="Funktionen"
 
-    //% group="Funktionen" 
+    //% group="Funktionen" advanced=true
     //% block="// %text" weight=6
     export function comment(text: string): void { }
 
-    //% group="Funktionen"
+    //% group="Funktionen" advanced=true
     //% block="%i0 zwischen %i1 und %i2" weight=4
     export function between(i0: number, i1: number, i2: number): boolean {
         return (i0 >= i1 && i0 <= i2)
