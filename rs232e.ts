@@ -8,9 +8,10 @@ namespace rs232 /* rs232e.ts
     // ========== group="Empfang"
 
     //% group="7 Bit ASCII Zeichen empfangen"
-    //% block="Empfang (warten auf Startbit) abbrechen" weight=9
-    export function empfangAbbrechen() {
-        n_escape = true
+    //% block="Empfang (warten auf Startbit) abbrechen || %escape" weight=9
+    //% escape.shadow=toggleYesNo escape.defl=1
+    export function empfangAbbrechen(escape = true) {
+        n_escape = escape
     }
 
 
@@ -56,8 +57,14 @@ namespace rs232 /* rs232e.ts
 
 
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
-    //% block="empfange 1 Zeichen (10-Bitarray)" weight=5
+    // ========== group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
+
+
+
+
+    //% blockId=rs232_empfange10Bit
+    //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
+    //% block="empfange 10-Bitarray" weight=8
     export function empfange10Bit(): boolean[] {
         let iPause_ms: number
         let empfangeneBits: boolean[] = []
@@ -84,31 +91,16 @@ namespace rs232 /* rs232e.ts
     }
 
 
-    //% group="Empfang: 1 Bit (Fototransistor hell ist true)" advanced=true
-    //% block="empfange 1 Bit (analogReadPin < Helligkeit)" weight=2
-    export function empfange1Bit() {
-        // hell ist true, analoger Wert < 150
-        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
+    //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
+    //% block="Empfang abgebrochen" weight=7
+    export function empfangAbgebrochen(): boolean {
+        return n_escape
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
-    //% block="10-Bitarray → ASCII Code %bitArray" weight=4
-    export function binToAsc(bitArray: boolean[]): number {
+    //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
+    //% block="ASCII Code aus 10-Bitarray %bitArray" weight=4
+    // bitArray.shadow=rs232_empfange10Bit
+    export function binToAsc(bitArray: boolean[]): number { // →
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
         let bBit: boolean
@@ -149,6 +141,14 @@ namespace rs232 /* rs232e.ts
             return iDez
         else
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
+    }
+
+
+    //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
+    //% block="empfange 1 Bit (analogReadPin < Helligkeit)" weight=2
+    export function empfange1Bit() {
+        // hell ist true, analoger Wert < 150
+        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
     }
 
 } // rs232e.ts

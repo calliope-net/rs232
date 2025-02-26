@@ -49,8 +49,8 @@ namespace rs232 /* rs232s.ts
     // ========== group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
 
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
-    //% block="sende 1-Startbit %send8Bit 2-Stopbit" weight=5
+    //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
+    //% block="sende 1-Startbit + %send8Bit + 2-Stopbit" weight=5
     //% send8Bit.shadow=rs232_ascToBin
     export function sende11Bit(send8Bit: boolean[]) {
         let iPause_ms = input.runningTime() + n_takt_ms
@@ -77,7 +77,7 @@ namespace rs232 /* rs232s.ts
 
 
     //% blockId=rs232_ascToBin
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="8-Bitarray aus ASCII Code %asc" weight=4
     //% asc.min=32 asc.max=127 asc.defl=13
     export function ascToBin(asc: number): boolean[] {
@@ -96,14 +96,14 @@ namespace rs232 /* rs232s.ts
 
 
   
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="8-Bitarray aus Text %text Index %index" weight=3
     export function chrToBin(text: string, index: number): boolean[] { // →
         return ascToBin(text.charCodeAt(index))
     }
 
 
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="sende 1 Bit: LED %bit (digitalWritePin)" weight=1
     //% bit.shadow=toggleOnOff
     export function sende1Bit(bit: boolean) {
