@@ -2,13 +2,16 @@
 //% color=#002050 icon="\uf093" block="RS-232" weight=15
 namespace rs232
 /* 
+    C16: fischertechnik Fototransistor 36134 mit Pull-Up Widerstand 100 k / Calliope v2
+    C17: fischertechnik Lichtschranken-LED 9V 0.01A 162135
     https://de.wikipedia.org/wiki/RS-232
     https://calliope-net.github.io/rs232-e41/
     https://calliope-net.github.io/rs232-e41/rs232.png
 */ {
+    const i2cCardKb_x5F = 0x5F
 
     export let n_pinLED: DigitalPin = DigitalPin.C17
-    export let n_pinFototransistor: AnalogPin = AnalogPin.C16
+    export let n_pinFototransistor: AnalogPin = AnalogPin.C16 // dunkel~860 / hell~20 / Calliope v2
     export let n_valueFototransistor: number = 150
     export let n_takt_ms: number = 400
     export let n_startBitTime: number = 0.5
@@ -47,4 +50,14 @@ namespace rs232
     export function between(i0: number, i1: number, i2: number): boolean {
         return (i0 >= i1 && i0 <= i2)
     }
+
+
+    //% group="Funktionen" advanced=true
+    //% block="ASCII Code von M5Stack Card Keyboard (I²C: 0x5E)" weight=3
+    export function readCardKeyboard() {
+        let buffer = pins.i2cReadBuffer(i2cCardKb_x5F, 1)
+        return buffer[0]
+    }
+
+
 } // rs232.ts
