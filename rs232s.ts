@@ -8,7 +8,7 @@ namespace rs232 /* rs232s.ts
 
 
 
-    //% group="Senden"
+    //% group="7 Bit ASCII Zeichen senden"
     //% block="sende Text %text || Ende-Zeichencode %endCode" weight=7
     //% endCode.defl=13
     export function sendeText(text: string, endCode = 13) {
@@ -21,19 +21,31 @@ namespace rs232 /* rs232s.ts
 
 
 
-    //% group="Senden"
+    //% group="7 Bit ASCII Zeichen senden"
     //% block="sende 1 Zeichen aus Text %text index %index" weight=6
     export function sendeChr(text: string, index: number) {
         sende11Bit(ascToBin(text.charCodeAt(index)))
     }
 
 
-    //% group="Senden"
+    //% group="7 Bit ASCII Zeichen senden"
     //% block="sende 1 Zeichen ASCII Code %asc" weight=5
     //% asc.min=32 asc.max=127 asc.defl=13
     export function sendeAsc(asc: number) {
         sende11Bit(ascToBin(asc))
     }
+
+  
+
+
+    //% group="7 Bit ASCII Zeichen senden"
+    //% block="Zeichencode aus Text %text index %index" weight=3
+    export function chrToAsc(text: string, index: number): number {
+        return text.charCodeAt(index)
+    }
+
+
+
 
 
 
@@ -101,14 +113,6 @@ namespace rs232 /* rs232s.ts
         bitArray.push(iParity % 2 != 0) // [7] das 8. Bit Parity
         return bitArray
     }
-
-
-    //% group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
-    //% block="ASCII Zeichen → ASCII Code text %text index %index" weight=3
-    export function chrToAsc(text: string, index: number): number {
-        return text.charCodeAt(index)
-    }
-
 
 
 } // rs232s.ts

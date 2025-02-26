@@ -8,7 +8,7 @@ namespace rs232 /* rs232e.ts
     // ========== group="Empfang"
 
 
-    //% group="Empfang"
+    //% group="7 Bit ASCII Zeichen empfangen"
     //% block="empfange Text || Ende-Zeichencode %endCode" weight=8
     //% endCode.defl=13
     export function empfangeText(endCode = 13): string {
@@ -32,15 +32,24 @@ namespace rs232 /* rs232e.ts
         return text
     }
 
-    //% group="Empfang"
+    //% group="7 Bit ASCII Zeichen empfangen"
     //% block="empfange 1 Zeichen ASCII (oder Fehler) Code " weight=7
     export function empfange1Zeichen() {
         n_escape = false
         return binToAsc(empfange10Bit()) // ASCII-Code oder Fehler-Code -1 -2 -3 -4
     }
 
-    //% group="Empfang"
-    //% block="warten auf Startbit abbrechen" weight=6
+    //% group="7 Bit ASCII Zeichen empfangen"
+    //% block="ASCII Code %ascByte → ASCII Zeichen 32..127 \\|Fehler\\|" weight=5
+    export function ascToChr(ascByte: number) {
+        if (between(ascByte, 32, 127))
+            return String.fromCharCode(ascByte)
+        else
+            return "|" + ascByte + "|"
+    }
+
+    //% group="7 Bit ASCII Zeichen empfangen"
+    //% block="Empfang (warten auf Startbit) abbrechen" weight=3
     export function empfangAbbrechen() {
         n_escape = true
     }
@@ -142,12 +151,4 @@ namespace rs232 /* rs232e.ts
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
     }
 
-    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit" advanced=true
-    //% block="ASCII Code → ASCII Zeichen %ascByte 32..127 \\|fehler\\|" weight=2
-    export function ascToChr(ascByte: number) {
-        if (between(ascByte, 32, 127))
-            return String.fromCharCode(ascByte)
-        else
-            return "|" + ascByte + "|"
-    }
 } // rs232e.ts
