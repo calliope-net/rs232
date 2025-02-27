@@ -3,9 +3,7 @@ namespace rs232 /* rs232e.ts
  
  */ {
 
-
-
-    // ========== group="Empfang"
+    // ========== group="7 Bit ASCII Zeichen empfangen"
 
     //% group="7 Bit ASCII Zeichen empfangen"
     //% block="Empfang (warten auf Startbit) abbrechen || %escape" weight=9
@@ -13,7 +11,6 @@ namespace rs232 /* rs232e.ts
     export function empfangAbbrechen(escape = true) {
         n_escape = escape
     }
-
 
     //% group="7 Bit ASCII Zeichen empfangen"
     //% block="empfange Text || Ende-Zeichencode %endCode" weight=8
@@ -57,10 +54,9 @@ namespace rs232 /* rs232e.ts
 
 
 
+    // ========== advanced=true
+
     // ========== group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
-
-
-
 
     //% blockId=rs232_empfange10Bit
     //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
@@ -93,7 +89,6 @@ namespace rs232 /* rs232e.ts
          } */
         return empfangeneBits
     }
-
 
     //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
     //% block="Empfang abgebrochen" weight=7
@@ -147,12 +142,11 @@ namespace rs232 /* rs232e.ts
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
     }
 
-
     //% group="empfangen: 1-Startbit + 7-Datenbit + 1-Paritätsbit + 1-Stopbit" advanced=true
     //% block="empfange 1 Bit (analogReadPin < Helligkeit)" weight=2
     export function empfange1Bit() {
         // hell ist true, analoger Wert < 150
-        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
+        return pins.analogReadPin(n_pinFototransistor) < n_helligkeit
     }
 
 } // rs232e.ts

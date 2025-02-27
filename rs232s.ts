@@ -3,10 +3,7 @@ namespace rs232 /* rs232s.ts
  
  */ {
 
-
-    // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"
-
-
+    // ========== group="7 Bit ASCII Zeichen senden"
 
     //% group="7 Bit ASCII Zeichen senden"
     //% block="sende Text %text || Ende-Zeichencode %endCode" weight=8
@@ -19,8 +16,6 @@ namespace rs232 /* rs232s.ts
             sende11Bit(ascToBin(endCode))
     }
 
-
-
     //% group="7 Bit ASCII Zeichen senden"
     //% block="sende 1 Zeichen ASCII Code %asc" weight=7
     //% asc.min=32 asc.max=127 asc.defl=13
@@ -28,15 +23,11 @@ namespace rs232 /* rs232s.ts
         sende11Bit(ascToBin(asc))
     }
 
-
-
     //% group="7 Bit ASCII Zeichen senden"
     //% block="sende 1 Zeichen aus Text %text Index %index" weight=6
     export function sendeChr(text: string, index: number) {
         sende11Bit(ascToBin(text.charCodeAt(index)))
     }
-
-
 
     //% group="7 Bit ASCII Zeichen senden"
     //% block="Zeichencode aus Text %text Index %index" weight=3
@@ -46,8 +37,9 @@ namespace rs232 /* rs232s.ts
 
 
 
-    // ========== group="Senden: 7 Datenbit, 1 Paritätsbit" advanced=true
+    // ========== advanced=true
 
+    // ========== group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
 
     //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="sende 1-Startbit + %send8Bit + 2-Stopbit" weight=5
@@ -74,8 +66,6 @@ namespace rs232 /* rs232s.ts
 
     }
 
-
-
     //% blockId=rs232_ascToBin
     //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="8-Bitarray aus ASCII Code %asc" weight=4
@@ -94,14 +84,11 @@ namespace rs232 /* rs232s.ts
         return bitArray
     }
 
-
-  
     //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="8-Bitarray aus Text %text Index %index" weight=3
     export function chrToBin(text: string, index: number): boolean[] { // →
         return ascToBin(text.charCodeAt(index))
     }
-
 
     //% group="senden: 8-Bitarray = 7-Datenbit + 1-Paritätsbit" advanced=true
     //% block="sende 1 Bit: LED %bit (digitalWritePin)" weight=1
@@ -112,7 +99,5 @@ namespace rs232 /* rs232s.ts
         else
             pins.digitalWritePin(n_pinLED, 0)
     }
-
-
 
 } // rs232s.ts

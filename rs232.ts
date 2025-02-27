@@ -7,16 +7,16 @@ namespace rs232
     oder
     P2: Fototransistor ohne Pull-Up Widerstand
     P1: Lichtschranken-LED
-    Takt zwischen 2 Calliope: 20ms / zum BT Smart Controller: 400ms
+    Takt zwischen 2 Calliope: 50ms / zum BT Smart Controller: 400ms
     https://de.wikipedia.org/wiki/RS-232
     https://calliope-net.github.io/rs232-e41/
     https://calliope-net.github.io/rs232-e41/rs232.png
 */ {
-    const i2cCardKb_x5F = 0x5F
+    const i2cCardKb_x5F = 0x5F // M5Stack Card Keyboard (I²C: 0x5E)
 
     export let n_pinLED: DigitalPin = DigitalPin.P1
     export let n_pinFototransistor: AnalogPin = AnalogPin.P2 // dunkel~860 / hell~20 / Calliope v2
-    export let n_valueFototransistor: number = 150
+    export let n_helligkeit: number = 150
     export let n_takt_ms: number = 400 // Takt zwischen 2 Calliope: 20ms / zum BT Smart Controller: 400ms
     export let n_startBitTime: number = 0.5
     export let n_escape: boolean = false // warten auf Startbit beim Empfang abbrechen
@@ -24,10 +24,10 @@ namespace rs232
     //% group="asynchrone serielle Datenübertragung mit Licht"
     //% block="Pins: LED %pinLED Fototransistor %pinFototransistor Helligkeit < %valueFototransistor" weight=5
     //% pinLED.defl=DigitalPin.P1 pinFototransistor.defl=AnalogPin.P2 valueFototransistor.defl=150
-    export function setPins(pinLED: DigitalPin, pinFototransistor: AnalogPin, valueFototransistor: number) {
+    export function setPins(pinLED: DigitalPin, pinFototransistor: AnalogPin, helligkeit: number) {
         n_pinLED = pinLED
         n_pinFototransistor = pinFototransistor
-        n_valueFototransistor = valueFototransistor
+        n_helligkeit = helligkeit
     }
 
     //% group="asynchrone serielle Datenübertragung mit Licht"
@@ -41,7 +41,7 @@ namespace rs232
 
 
 
-
+    // ========== advanced=true
 
     // ========== group="Funktionen"
 
@@ -50,11 +50,27 @@ namespace rs232
     export function comment(text: string): void { }
 
     //% group="Funktionen" advanced=true
-    //% block="%i0 zwischen %i1 und %i2" weight=4
+    //% block="%i0 zwischen %i1 und %i2" weight=5
     export function between(i0: number, i1: number, i2: number): boolean {
         return (i0 >= i1 && i0 <= i2)
     }
 
+    export enum eVariablen {
+        takt_ms, helligkeit, startBitTime, pinFototransistor, pinLED
+    }
+
+    //% group="Funktionen" advanced=true
+    //% block="Variable %e" weight=4
+    export function getVariable(e: eVariablen): number {
+        switch (e) {
+            case eVariablen.takt_ms: return n_takt_ms
+            case eVariablen.helligkeit: return n_helligkeit
+            case eVariablen.startBitTime: return n_startBitTime
+            case eVariablen.pinFototransistor: return n_pinFototransistor
+            case eVariablen.pinLED: return n_pinLED
+            default: return 0
+        }
+    }
 
     //% group="Funktionen" advanced=true
     //% block="ASCII Code von M5Stack Card Keyboard (I²C: 0x5E)" weight=3
@@ -62,6 +78,5 @@ namespace rs232
         let buffer = pins.i2cReadBuffer(i2cCardKb_x5F, 1)
         return buffer[0]
     }
-
 
 } // rs232.ts
