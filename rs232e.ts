@@ -13,20 +13,22 @@ namespace rs232 /* rs232e.ts
     }
 
     //% group="7 Bit ASCII Zeichen empfangen"
-    //% block="empfange Text || Ende-Zeichencode %endCode" weight=8
+    //% block="empfange Text || Ende-Zeichencode %endCode anhängen %add" weight=8
     //% endCode.defl=13
-    export function empfangeText(endCode = 13): string {
+    //% add.shadow=toggleYesNo
+    export function empfangeText(endCode = 13, add = false): string {
         n_escape = false
         let text = ""
         let iAsc: number
         while (!n_escape) {
             iAsc = binToAsc(empfange10Bit()) // ASCII-Code oder Fehler-Code -1 -2 -3 -4
             if (iAsc == endCode) {
-                text += String.fromCharCode(iAsc)
+                if (add)
+                    text += String.fromCharCode(iAsc)
                 break
             }
             else if (iAsc == -1) {
-                text += "|" + iAsc + "|"
+                text += "^" // + iAsc + "|"
                 break
             }
             else {
