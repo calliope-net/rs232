@@ -14,8 +14,8 @@ namespace rs232
 */ {
     const i2cCardKb_x5F = 0x5F
 
-    export let n_pinLED: DigitalPin = DigitalPin.C17
-    export let n_pinFototransistor: AnalogPin = AnalogPin.C16 // dunkel~860 / hell~20 / Calliope v2
+    export let n_pinLED: DigitalPin = DigitalPin.P1
+    export let n_pinFototransistor: AnalogPin = AnalogPin.P2 // dunkel~860 / hell~20 / Calliope v2
     export let n_valueFototransistor: number = 150
     export let n_takt_ms: number = 400 // Takt zwischen 2 Calliope: 20ms / zum BT Smart Controller: 400ms
     export let n_startBitTime: number = 0.5
@@ -23,7 +23,7 @@ namespace rs232
 
     //% group="asynchrone serielle Datenübertragung mit Licht"
     //% block="Pins: LED %pinLED Fototransistor %pinFototransistor Helligkeit < %valueFototransistor" weight=5
-    //% pinLED.defl=DigitalPin.C17 pinFototransistor.defl=AnalogPin.C16 valueFototransistor.defl=150
+    //% pinLED.defl=DigitalPin.P1 pinFototransistor.defl=AnalogPin.P2 valueFototransistor.defl=150
     export function setPins(pinLED: DigitalPin, pinFototransistor: AnalogPin, valueFototransistor: number) {
         n_pinLED = pinLED
         n_pinFototransistor = pinFototransistor
