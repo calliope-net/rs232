@@ -76,7 +76,7 @@ namespace rs232 /* rs232e.ts
             if (n_takt_ms >= 50)
                 basic.pause(10) // ohne Pause funktioniert das Abbruch Ereignis nicht (z.B. Knopf A halten)
             else
-                basic.pause(n_takt_ms * 0.2)
+                basic.pause(n_takt_ms * 0.1)
         }
         if (!n_escape) {
 
