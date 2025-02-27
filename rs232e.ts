@@ -70,10 +70,13 @@ namespace rs232 /* rs232e.ts
         let empfangeneBits: boolean[] = []
 
         while (!empfange1Bit()) { // auf Startbit warten (Licht an)
-            iPause_ms = input.runningTime() + n_takt_ms * n_startBitTime // 0.5 oder 0.45
+            iPause_ms = input.runningTime() + n_takt_ms * n_startBitTime // 0.5 oder 0.45 zwischen Beginn Startbit und einlesen
             if (n_escape)
                 break
-            basic.pause(10) // ohne Pause funktioniert das Abbruch Ereignis nicht (z.B. Knopf A halten)
+            if (n_takt_ms >= 50)
+                basic.pause(10) // ohne Pause funktioniert das Abbruch Ereignis nicht (z.B. Knopf A halten)
+            else
+                basic.pause(n_takt_ms * 0.2)
         }
         if (!n_escape) {
 
